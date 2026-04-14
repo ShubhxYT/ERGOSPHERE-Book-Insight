@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.github
+
+plans
+stitch
+
+dockling.py
+AI-Powered Book Insight Assignment.pdf
+AI-Powered Book Insight Assignment.md
