@@ -41,7 +41,13 @@ class RAGQueryView(APIView):
             )
 
         pipeline = RAGPipeline()
-        result = pipeline.query(question, session_id)
+        try:
+            result = pipeline.query(question, session_id)
+        except Exception as exc:
+            return Response(
+                {"error": str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
 
         ChatMessage.objects.create(
             session_id=session_id,

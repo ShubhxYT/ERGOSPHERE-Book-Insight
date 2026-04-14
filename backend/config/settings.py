@@ -119,4 +119,12 @@ CACHES = {
 # App-specific settings
 MAX_PAGES = env("MAX_PAGES")
 GROQ_API_KEY = env("GROQ_API_KEY")
+GROQ_PRIMARY_MODEL = env("GROQ_PRIMARY_MODEL", default="llama-3.3-70b-versatile")
+GROQ_FALLBACK_MODELS = env(
+    "GROQ_FALLBACK_MODELS",
+    default="llama-3.1-8b-instant,gemma2-9b-it,mixtral-8x7b-32768",
+)
+# OpenAI fallback — used only when all Groq models are rate-limited
+OPENAI_API_KEY = env("OPENAI_API_KEY", default="")
+OPENAI_FALLBACK_MODEL = env("OPENAI_FALLBACK_MODEL", default="gpt-4o-mini")
 CHROMA_PERSIST_DIR = env("CHROMA_PERSIST_DIR", default=str(BASE_DIR / "chroma_db"))

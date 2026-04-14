@@ -11,6 +11,7 @@ export default function BookDetail() {
   const [similarBooks, setSimilarBooks] = useState([])
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
+  const [generateError, setGenerateError] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -33,11 +34,17 @@ export default function BookDetail() {
 
   const handleGenerate = async () => {
     setGenerating(true)
+    setGenerateError(null)
     try {
       await generateInsights(book.id)
       const res = await getBook(id)
       setBook(res.data)
     } catch (err) {
+      const msg =
+        err?.response?.data?.error ||
+        err?.message ||
+        "Insight generation failed. Please try again."
+      setGenerateError(msg)
       console.error("Insight generation failed:", err)
     } finally {
       setGenerating(false)
@@ -101,6 +108,9 @@ export default function BookDetail() {
               ? "Insights Generated"
               : "Generate AI Insights"}
           </button>
+          {generateError && (
+            <p className="mt-2 text-xs text-error leading-snug">{generateError}</p>
+          )}
         </div>
         <div className="md:col-span-2 space-y-5">
           <h1

@@ -2,12 +2,12 @@ import hashlib
 import logging
 
 from django.core.cache import cache
-from groq import Groq
 from django.conf import settings
 
 from .embeddings import embed_text
 from .vector_store import query as vector_query
 from insights.models import InsightCache
+from insights.groq_client import complete
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ Guidelines:
 
 class RAGPipeline:
     def __init__(self):
-        self.groq_client = Groq(api_key=settings.GROQ_API_KEY)
+        pass
 
     def query(self, question, session_id=None):
         # Check cache
@@ -86,17 +86,12 @@ class RAGPipeline:
                 f"Question: {question}"
             )
 
-        # Call Groq
-        response = self.groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_prompt},
-            ],
+        # Call LLM via shared client (Groq with fallback → OpenAI)
+        answer = complete(
+            system_prompt=SYSTEM_PROMPT,
+            user_prompt=user_prompt,
             max_tokens=1024,
-            temperature=0.7,
         )
-        answer = response.choices[0].message.content
 
         result = {"answer": answer, "sources": sources}
 

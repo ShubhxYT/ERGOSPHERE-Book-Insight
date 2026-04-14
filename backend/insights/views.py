@@ -39,7 +39,13 @@ class InsightGenerateView(APIView):
             )
 
         generator = InsightGenerator()
-        generator.generate_all(book)
+        try:
+            generator.generate_all(book)
+        except Exception as exc:
+            return Response(
+                {"error": str(exc)},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
 
         return Response({
             "status": "completed",
