@@ -10,7 +10,6 @@ main.py
 backend/.env
 
 # Virtual environments
-venv
 .venv
 .github
 

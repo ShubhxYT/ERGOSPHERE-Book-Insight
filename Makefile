@@ -1,7 +1,7 @@
 .PHONY: help install setup migrate run scrape insights index clean db-setup db-drop backend frontend test check
 
 SHELL := /bin/bash
-VENV := venv
+VENV := .venv
 PYTHON := ./$(VENV)/bin/python
 PIP := ./$(VENV)/bin/pip
 NPM := npm

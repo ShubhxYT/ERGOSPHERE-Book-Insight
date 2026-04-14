@@ -37,8 +37,8 @@ FLUSH PRIVILEGES;
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate   # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 cp .env.example .env
@@ -239,7 +239,7 @@ curl -X POST http://localhost:8000/api/rag/query/ \
 ### Run Backend
 ```bash
 cd backend
-source venv/bin/activate
+source .venv/bin/activate
 python manage.py runserver
 ```
 
