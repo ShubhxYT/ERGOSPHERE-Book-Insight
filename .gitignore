@@ -5,10 +5,22 @@ build/
 dist/
 wheels/
 *.egg-info
+main.py
+.env
+backend/.env
 
 # Virtual environments
 .venv
 .github
+
+# Node and Frontend
+node_modules/
+frontend/node_modules/
+.vite/
+
+# ChromaDB and local data
+backend/chroma_db/
+*.sqlite3
 
 plans
 stitch

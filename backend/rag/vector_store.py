@@ -25,7 +25,12 @@ def get_collection():
 
 
 def add_book(book):
+    genre_label = " ".join(
+        filter(None, [book.genre, book.ai_genre])
+    )
     text = ""
+    if genre_label:
+        text += genre_label + ". "
     if book.description:
         text += book.description + " "
     if book.ai_summary:
@@ -42,7 +47,13 @@ def add_book(book):
     collection = get_collection()
     ids = [f"book_{book.id}_chunk_{i}" for i in range(len(chunks))]
     metadatas = [
-        {"book_id": book.id, "book_title": book.title, "chunk_index": i}
+        {
+            "book_id": book.id,
+            "book_title": book.title,
+            "chunk_index": i,
+            "genre": book.genre or "",
+            "ai_genre": book.ai_genre or "",
+        }
         for i in range(len(chunks))
     ]
     embeddings = embed_texts(chunks)
@@ -56,6 +67,9 @@ def add_book(book):
     return len(chunks)
 
 
+DISTANCE_THRESHOLD = 0.65
+
+
 def query(question_embedding, top_k=5):
     collection = get_collection()
     results = collection.query(
@@ -65,4 +79,5 @@ def query(question_embedding, top_k=5):
     )
     chunks = results["documents"][0] if results["documents"] else []
     metadatas = results["metadatas"][0] if results["metadatas"] else []
-    return chunks, metadatas
+    distances = results["distances"][0] if results["distances"] else []
+    return chunks, metadatas, distances
