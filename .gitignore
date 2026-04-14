@@ -9,6 +9,8 @@ main.py
 .env
 backend/.env
 
+DESIGN.md
+
 # Virtual environments
 .venv
 .github

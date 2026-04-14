@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+@theme {
+  /* ── Surface hierarchy ── */
+  --color-surface: #0b1326;
+  --color-surface-container-lowest: #060e20;
+  --color-surface-container-low: #131d33;
+  --color-surface-container: #1a2438;
+  --color-surface-container-high: #222e44;
+  --color-surface-container-highest: #2d3449;
+
+  /* ── Brand accents ── */
+  --color-primary: #76d6d5;
+  --color-primary-container: #008080;
+  --color-secondary-container: #ffbf00;
+
+  /* ── Text ── */
+  --color-on-primary: #0b1326;
+  --color-on-surface: #dae2fd;
+  --color-on-surface-variant: #a8b4d0;
+  --color-outline-variant: rgba(62, 73, 73, 0.2);
+
+  /* ── Typography ── */
+  --font-display: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* Global base */
+body {
+  background-color: #0b1326;
+  color: #dae2fd;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Insight Pulse — teal left rail for AI-generated text */
+.insight-pulse {
+  border-left: 3px solid #76d6d5;
+  padding-left: 1rem;
+}
+

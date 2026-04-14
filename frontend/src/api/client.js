@@ -35,4 +35,8 @@ export function getChatHistory(sessionId) {
   return api.get("/chat/history/", { params: { session_id: sessionId } })
 }
 
+export function clearChatHistory(sessionId) {
+  return api.delete("/chat/history/clear/", { params: { session_id: sessionId } })
+}
+
 export default api

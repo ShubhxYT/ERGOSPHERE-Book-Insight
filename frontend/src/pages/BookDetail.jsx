@@ -46,10 +46,10 @@ export default function BookDetail() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-6 py-10">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-64 bg-gray-200 rounded" />
+          <div className="h-6 bg-surface-container rounded w-1/4" />
+          <div className="h-64 bg-surface-container rounded-xl" />
         </div>
       </div>
     )
@@ -57,9 +57,9 @@ export default function BookDetail() {
 
   if (!book) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <p className="text-gray-500">Book not found.</p>
-        <Link to="/" className="text-blue-600 hover:underline">
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <p className="text-on-surface-variant">Book not found.</p>
+        <Link to="/" className="text-primary hover:text-primary/80">
           ← Back to all books
         </Link>
       </div>
@@ -67,54 +67,75 @@ export default function BookDetail() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link to="/" className="text-blue-600 hover:underline text-sm mb-4 inline-block">
+    <div className="max-w-4xl mx-auto px-6 py-10">
+      <Link
+        to="/"
+        className="text-primary hover:text-primary/80 text-sm inline-flex items-center gap-1 mb-6"
+      >
         ← Back to all books
       </Link>
 
-      <div className="grid md:grid-cols-3 gap-8 mb-8">
+      <div className="grid md:grid-cols-3 gap-8 mb-10">
         <div className="md:col-span-1">
-          <img
-            src={book.cover_image_url}
-            alt={book.title}
-            className="w-full rounded-lg shadow-lg mb-4"
-          />
+          <div
+            className="rounded-xl overflow-hidden -translate-y-2"
+            style={{ boxShadow: "0 20px 40px rgba(218, 226, 253, 0.08)" }}
+          >
+            <img
+              src={book.cover_image_url}
+              alt={book.title}
+              className="w-full"
+            />
+          </div>
           <button
             onClick={handleGenerate}
             disabled={generating || book.insights_generated}
-            className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-colors"
+            className="mt-4 w-full text-on-primary font-medium px-4 py-3 rounded-xl disabled:opacity-40 transition-opacity"
+            style={{
+              background: "linear-gradient(135deg, #76d6d5 0%, #008080 100%)",
+            }}
           >
-            {generating ? "Generating..." : book.insights_generated ? "Insights Generated" : "Generate AI Insights"}
+            {generating
+              ? "Generating..."
+              : book.insights_generated
+              ? "Insights Generated"
+              : "Generate AI Insights"}
           </button>
         </div>
-        <div className="md:col-span-2">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{book.title}</h1>
-          <div className="flex items-center gap-4 mb-4">
+        <div className="md:col-span-2 space-y-5">
+          <h1
+            className="text-4xl font-bold text-on-surface leading-tight"
+            style={{ fontFamily: "Manrope, sans-serif" }}
+          >
+            {book.title}
+          </h1>
+          <div className="flex items-center gap-3">
             <RatingStars rating={book.rating} />
-            <span className="text-lg text-gray-600">{book.rating}/5</span>
-            <span className="text-gray-500">({book.num_reviews} reviews)</span>
+            <span className="text-secondary-container font-semibold">{book.rating}/5</span>
+            <span className="text-on-surface-variant text-sm">({book.num_reviews} reviews)</span>
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div>
-              <p className="text-sm text-gray-600">Genre</p>
-              <p className="font-semibold">{book.genre || "Unknown"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Price</p>
-              <p className="font-semibold">{book.price || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Availability</p>
-              <p className="font-semibold">{book.availability || "N/A"}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Author</p>
-              <p className="font-semibold">{book.author}</p>
-            </div>
+          <div className="grid grid-cols-2 gap-3 bg-surface-container-low rounded-xl p-5">
+            {[
+              ["Genre", book.genre || "Unknown"],
+              ["Price", book.price || "N/A"],
+              ["Availability", book.availability || "N/A"],
+              ["Author", book.author],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <p className="text-xs text-on-surface-variant uppercase tracking-wide mb-0.5">{label}</p>
+                <p
+                  className={`font-semibold text-on-surface ${
+                    label === "Price" ? "text-secondary-container" : ""
+                  }`}
+                >
+                  {value}
+                </p>
+              </div>
+            ))}
           </div>
-          <div>
-            <p className="text-sm text-gray-600 mb-2">Description</p>
-            <p className="text-gray-700">{book.description}</p>
+          <div className="bg-surface-container rounded-xl px-5 py-4">
+            <p className="text-xs text-on-surface-variant uppercase tracking-wide mb-2">Description</p>
+            <p className="text-on-surface-variant leading-relaxed">{book.description}</p>
           </div>
         </div>
       </div>
@@ -122,8 +143,13 @@ export default function BookDetail() {
       {book.insights_generated && <InsightPanel book={book} />}
 
       {similarBooks.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Similar Books</h2>
+        <div className="mt-10">
+          <h2
+            className="text-2xl font-bold text-on-surface mb-6"
+            style={{ fontFamily: "Manrope, sans-serif" }}
+          >
+            Similar Books
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {similarBooks.map((b) => (
               <BookCard key={b.id} book={b} />

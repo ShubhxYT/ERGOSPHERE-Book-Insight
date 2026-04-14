@@ -7,21 +7,31 @@ function Nav() {
   const linkClass = ({ isActive }) =>
     `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
       isActive
-        ? "bg-blue-600 text-white"
-        : "text-gray-600 hover:bg-gray-100"
+        ? "text-primary border-b-2 border-primary bg-primary/10"
+        : "text-on-surface-variant hover:text-on-surface"
     }`
 
   return (
-    <nav className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-        <span className="text-xl font-bold text-blue-600 mr-6">
-          📚 Book Insights
+    <nav
+      className="sticky top-0 z-50"
+      style={{
+        background: "rgba(27, 36, 56, 0.80)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-6">
+        <span
+          className="text-xl font-bold text-primary mr-6 tracking-tight"
+          style={{ fontFamily: "Manrope, sans-serif" }}
+        >
+          Book Insights
         </span>
         <NavLink to="/" className={linkClass}>
           Dashboard
         </NavLink>
         <NavLink to="/qa" className={linkClass}>
-          Q&A
+          Q&amp;A
         </NavLink>
       </div>
     </nav>
@@ -31,7 +41,7 @@ function Nav() {
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-surface">
         <Nav />
         <Routes>
           <Route path="/" element={<BookList />} />

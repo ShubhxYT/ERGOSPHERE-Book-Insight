@@ -26,23 +26,26 @@ export default function ChatBox({ sessionId, onNewMessage }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className="flex gap-3">
       <input
         type="text"
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Ask a question about books..."
-        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="flex-1 px-4 py-3 rounded-xl bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-2 focus:ring-primary"
         disabled={loading}
       />
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="text-on-primary font-medium px-6 py-3 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+        style={{
+          background: "linear-gradient(135deg, #76d6d5 0%, #008080 100%)",
+        }}
       >
         {loading ? (
           <span className="inline-flex items-center gap-2">
-            <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span className="inline-block w-4 h-4 border-2 border-on-primary border-t-transparent rounded-full animate-spin" />
             Asking...
           </span>
         ) : (

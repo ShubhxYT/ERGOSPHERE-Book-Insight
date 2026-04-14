@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { getChatHistory } from "../api/client"
+import { getChatHistory, clearChatHistory } from "../api/client"
 import ChatBox from "../components/ChatBox"
 import ChatHistory from "../components/ChatHistory"
 
@@ -35,23 +35,61 @@ export default function QAPage() {
     setMessages((prev) => [msg, ...prev])
   }
 
+  const handleClearHistory = async () => {
+    try {
+      await clearChatHistory(sessionId)
+      setMessages([])
+    } catch (err) {
+      console.error("Failed to clear chat history:", err)
+    }
+  }
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <div className="max-w-4xl mx-auto px-6 py-10">
+      <h1
+        className="text-4xl font-bold text-on-surface mb-2"
+        style={{ fontFamily: "Manrope, sans-serif" }}
+      >
         Ask About Books
       </h1>
-      <p className="text-gray-500 mb-6">
-        Ask questions about any book in our collection. Powered by RAG + Groq AI.
-      </p>
+      <div className="flex items-center gap-3 mb-8">
+        <p className="text-on-surface-variant">
+          Ask questions about any book in our collection.
+        </p>
+        <span
+          className="inline-block text-xs text-primary px-3 py-1 rounded-full whitespace-nowrap"
+          style={{ background: "rgba(0, 128, 128, 0.15)" }}
+        >
+          Powered by RAG + Groq AI
+        </span>
+      </div>
 
       <div className="mb-8">
         <ChatBox sessionId={sessionId} onNewMessage={handleNewMessage} />
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-lg font-semibold mb-4">Conversation History</h2>
+      <div className="bg-surface-container rounded-xl p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h2
+            className="text-lg font-semibold text-on-surface"
+            style={{ fontFamily: "Manrope, sans-serif" }}
+          >
+            Conversation History
+          </h2>
+          {messages.length > 0 && (
+            <button
+              onClick={handleClearHistory}
+              className="text-xs text-on-surface-variant hover:text-red-400 transition-colors"
+            >
+              Clear History
+            </button>
+          )}
+        </div>
         {loading ? (
-          <p className="text-gray-500">Loading...</p>
+          <div className="space-y-3">
+            <div className="h-16 bg-surface-container-highest rounded-xl animate-pulse" />
+            <div className="h-16 bg-surface-container-highest rounded-xl animate-pulse" />
+          </div>
         ) : (
           <ChatHistory messages={messages} />
         )}

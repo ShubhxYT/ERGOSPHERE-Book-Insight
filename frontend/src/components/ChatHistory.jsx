@@ -1,23 +1,37 @@
 export default function ChatHistory({ messages }) {
   if (!messages.length) {
     return (
-      <p className="text-gray-500 text-sm italic">No conversation yet. Ask a question to get started!</p>
+      <p className="text-on-surface-variant text-sm italic">
+        No conversation yet. Ask a question to get started!
+      </p>
     )
   }
 
   return (
     <div className="space-y-4">
       {messages.map((msg, idx) => (
-        <div key={idx} className="border-b border-gray-100 pb-4">
-          <p className="font-semibold text-blue-600 text-sm mb-2">Your Question:</p>
-          <p className="text-gray-900 mb-3">{msg.question}</p>
-          <p className="font-semibold text-green-600 text-sm mb-2">Answer:</p>
-          <p className="text-gray-700 mb-2">{msg.answer}</p>
+        <div key={idx} className="bg-surface-container rounded-xl p-4 space-y-3">
+          <div>
+            <p className="text-primary text-xs font-semibold uppercase tracking-wide mb-1">
+              Your Question
+            </p>
+            <p className="text-on-surface font-medium">{msg.question}</p>
+          </div>
+          <div>
+            <p className="text-secondary-container text-xs font-semibold uppercase tracking-wide mb-1">
+              Answer
+            </p>
+            <div className="insight-pulse">
+              <p className="text-on-surface-variant leading-relaxed">{msg.answer}</p>
+            </div>
+          </div>
           {msg.sources && msg.sources.length > 0 && (
-            <div className="text-xs text-gray-500 mt-2">
-              <p className="font-semibold">Sources:</p>
+            <div className="bg-surface-container-lowest rounded-lg px-3 py-2 space-y-1">
+              <p className="text-on-surface-variant/70 text-xs font-semibold">Sources</p>
               {msg.sources.map((source, i) => (
-                <p key={i}>• {source.book_title}</p>
+                <p key={i} className="text-on-surface-variant/70 text-xs">
+                  · {source.book_title}
+                </p>
               ))}
             </div>
           )}

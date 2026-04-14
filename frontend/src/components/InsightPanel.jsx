@@ -13,24 +13,32 @@ export default function InsightPanel({ book }) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-lg font-semibold mb-4">AI Insights</h2>
-      <div className="flex border-b mb-4">
+    <div className="bg-surface-container rounded-xl p-6">
+      <h2
+        className="text-lg font-semibold text-on-surface mb-5 flex items-center gap-2"
+        style={{ fontFamily: "Manrope, sans-serif" }}
+      >
+        <span className="w-2 h-2 rounded-full bg-primary inline-block" />
+        AI Insights
+      </h2>
+      <div className="flex gap-1 mb-5">
         {TABS.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 font-medium transition-colors ${
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
               activeTab === tab
-                ? "border-b-2 border-blue-600 text-blue-600"
-                : "text-gray-600 hover:text-gray-900"
+                ? "text-primary border-b-2 border-primary bg-primary/5"
+                : "text-on-surface-variant hover:text-on-surface"
             }`}
           >
             {tab}
           </button>
         ))}
       </div>
-      <p className="text-gray-700 leading-relaxed">{content[activeTab]}</p>
+      <div className="insight-pulse">
+        <p className="text-on-surface-variant leading-relaxed">{content[activeTab]}</p>
+      </div>
     </div>
   )
 }

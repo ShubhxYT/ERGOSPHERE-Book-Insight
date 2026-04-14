@@ -1,4 +1,4 @@
-.PHONY: help install setup migrate run scrape insights index clean db-setup db-drop backend frontend test check
+.PHONY: help install setup migrate run scrape insights index clean backend frontend test check
 
 SHELL := /bin/bash
 VENV := .venv
@@ -17,9 +17,7 @@ help:
 	@echo ""
 	@echo "$(GREEN)Setup & Installation:$(NC)"
 	@echo "  make install          Install all dependencies (backend + frontend)"
-	@echo "  make setup            Complete setup (database + dependencies + migrations)"
-	@echo "  make db-setup         Create MySQL database and user"
-	@echo "  make db-drop          Drop MySQL database (careful!)"
+	@echo "  make setup            Complete setup (dependencies + migrations)"
 	@echo ""
 	@echo "$(GREEN)Development:$(NC)"
 	@echo "  make migrate          Run Django migrations"
@@ -58,7 +56,8 @@ install: install-backend install-frontend
 
 install-backend:
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
-	@cd backend && source ../$(VENV)/bin/activate && pip install -r requirements.txt
+	@python3 -m venv $(VENV) --upgrade
+	@$(PIP) install -r backend/requirements.txt
 	@echo "$(GREEN)✓ Backend dependencies installed$(NC)"
 
 install-frontend:
@@ -66,36 +65,16 @@ install-frontend:
 	@cd frontend && $(NPM) install
 	@echo "$(GREEN)✓ Frontend dependencies installed$(NC)"
 
-setup: db-setup migrate install
+setup: install migrate
 	@echo "$(BLUE)Building vector index...$(NC)"
-	@cd backend && source ../$(VENV)/bin/activate && python manage.py build_index --all
+	@cd backend && source ../$(VENV)/bin/activate && $(PYTHON) manage.py build_index --all
 	@echo "$(GREEN)✓ Setup complete! Run 'make run' to start the application$(NC)"
 
 # ============================================================================
 # DATABASE SETUP
 # ============================================================================
-
-db-setup:
-	@echo "$(BLUE)Creating MySQL database and user...$(NC)"
-	@mysql -u root -e "CREATE DATABASE IF NOT EXISTS book_insight CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" && \
-	mysql -u root -e "CREATE USER IF NOT EXISTS 'bookuser'@'localhost' IDENTIFIED BY 'bookpass';" && \
-	mysql -u root -e "GRANT ALL PRIVILEGES ON book_insight.* TO 'bookuser'@'localhost';" && \
-	mysql -u root -e "FLUSH PRIVILEGES;" && \
-	echo "$(GREEN)✓ Database created$(NC)" || echo "$(RED)Failed to create database$(NC)"
-
-db-drop:
-	@echo "$(YELLOW)⚠ WARNING: This will delete the book_insight database!$(NC)"
-	@read -p "Are you sure? Type 'yes' to confirm: " confirm && \
-	if [ "$$confirm" = "yes" ]; then \
-		mysql -u root -e "DROP DATABASE IF EXISTS book_insight;" && \
-		echo "$(GREEN)✓ Database dropped$(NC)"; \
-	else \
-		echo "Cancelled"; \
-	fi
-
-db-shell:
-	@echo "Opening MySQL shell..."
-	@mysql -u bookuser -pbookpass book_insight
+# SQLite is used — no database server setup required.
+# The database file is created automatically at backend/db.sqlite3.
 
 # ============================================================================
 # MIGRATIONS & DJANGO
@@ -220,7 +199,7 @@ shell:
 # DEVELOPMENT SHORTCUTS
 # ============================================================================
 
-fresh: clean db-drop db-setup migrate scrape
+fresh: clean migrate scrape
 	@echo "$(GREEN)✓ Fresh installation complete!$(NC)"
 
 show-books:

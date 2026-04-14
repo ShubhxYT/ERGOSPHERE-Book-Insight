@@ -55,7 +55,7 @@ class BookRecommendationsView(generics.GenericAPIView):
 
         text = f"{book.title} {book.description} {book.ai_summary}"
         embedding = embed_text(text)
-        chunks, metadatas = vector_query(embedding, top_k=6)
+        chunks, metadatas, distances = vector_query(embedding, top_k=6)
 
         # Exclude the book itself
         similar_ids = []
