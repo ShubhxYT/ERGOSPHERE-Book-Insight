@@ -8,6 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
     MAX_PAGES=(int, 50),
+    CORS_ALLOWED_ORIGINS=(list, ["http://localhost:5173", "http://127.0.0.1:5173"]),
 )
 environ.Env.read_env(BASE_DIR / ".env")
 
@@ -101,11 +102,8 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-# CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+# CORS — configurable via CORS_ALLOWED_ORIGINS env var (comma-separated list)
+CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
 
 # Cache
 CACHES = {

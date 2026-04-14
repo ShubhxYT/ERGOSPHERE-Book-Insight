@@ -1,0 +1,56 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist
+build
+.eggs
+
+# Virtual environments
+.venv
+venv
+env
+
+# Environment files (NEVER bake secrets into image)
+.env
+.env.*
+!.env.example
+
+# Frontend build artifacts (re-built inside container)
+frontend/node_modules
+frontend/dist
+frontend/.vite
+
+# Backend runtime data (volume-mounted in production)
+backend/db.sqlite3
+backend/chroma_db
+
+# Django collected static (generated at startup)
+backend/staticfiles
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testing
+.pytest_cache
+htmlcov
+.coverage
+coverage.xml
+
+# Docs
+*.md
+!README.md
