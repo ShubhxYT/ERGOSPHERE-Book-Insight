@@ -1,11 +1,11 @@
 import logging
+import os
 import time
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 from books.models import Book
 
@@ -25,12 +25,13 @@ STAR_MAP = {
 class BookScraper:
     def __init__(self):
         options = Options()
+        options.binary_location = os.environ.get("CHROME_BIN", "/usr/bin/chromium")
         options.add_argument("--headless=new")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
+            service=Service(executable_path=os.environ.get("CHROMEDRIVER_PATH", "/usr/bin/chromedriver")),
             options=options,
         )
 
