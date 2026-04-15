@@ -183,17 +183,23 @@ curl -X POST http://localhost:8000/api/rag/query/ \
 - View book cover images and prices
 - Quick scraper trigger
 
+![Dashboard](screenshots/dashbourd.png)
+
 ### Book Detail
 - Full book metadata (title, author, rating, genre, price, availability)
 - AI-generated insights (summary, genre classification, sentiment analysis, recommendations)
 - Similar book recommendations based on vector similarity
 - One-click AI insight generation
 
+![Book Details](screenshots/book-details.png)
+
 ### Q&A Chat
 - Ask natural language questions about books
 - RAG-powered answers with source citations
 - Chat history persistence (browser localStorage)
 - Session-based conversation management
+
+![Q&A Chat](screenshots/Q&A-Chat.png)
 
 ### Backend Features
 - Automatic book scraping from books.toscrape.com
