@@ -1,103 +1,107 @@
-# Book Insight Platform
+# 📖 Book Insight Platform
 
-An AI-powered book intelligence platform that scrapes book data, generates AI insights, and provides a RAG-based Q&A interface.
+> AI-powered book RAG platform with intelligent insights & Q&A. Live at [ergosphere.shubhsomani.tech](https://ergosphere.shubhsomani.tech).
+
+## Features
+
+- **Book Scraping**: Selenium automation for book data collection
+- **AI Insights**: Summaries, genre classification, recommendations, sentiment analysis
+- **RAG Pipeline**: Context-aware Q&A with source citations
+- **Vector Search**: Semantic book recommendations
+- **REST APIs**: Full Swagger UI documentation
+- **Modern UI**: React + Tailwind CSS
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Django 4.2, Django REST Framework |
-| Database | MySQL (metadata), ChromaDB (vectors) |
-| AI/LLM | Groq (`llama-3.3-70b-versatile`) |
-| Embeddings | Sentence Transformers (`all-MiniLM-L6-v2`) |
-| Scraping | Selenium + BeautifulSoup4 |
-| Frontend | React 18, Vite, Tailwind CSS |
-| API Docs | drf-spectacular (Swagger UI) |
+| Backend | Django, ChromaDB, Groq LLM |
+| Frontend | React 18, Vite, Tailwind |
+| Database | SQLite (metadata), ChromaDB (vectors) |
+| Scraping | Selenium, BeautifulSoup |
 
-## Setup Instructions
-
-### Prerequisites
-
-- Python 3.12+
-- Node.js 18+
-- MySQL server
-- Google Chrome (for Selenium)
-- Groq API key ([console.groq.com](https://console.groq.com))
-
-### 1. Database Setup
-
-```sql
-CREATE DATABASE book_insight CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'bookuser'@'localhost' IDENTIFIED BY 'bookpass';
-GRANT ALL PRIVILEGES ON book_insight.* TO 'bookuser'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-### 2. Backend Setup
+## Quick Start
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate   # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-cp .env.example .env
-# Edit .env with your database credentials and Groq API key
-
-python manage.py migrate
-python manage.py runserver
+# Everything via Makefile
+make help              # See all commands
+make install          # Install dependencies
+make setup            # Full setup (deps + migrations + index)
+make scrape           # Scrape 2 sample books
+make backend          # Run Django (port 8000)
+make frontend         # Run React (port 5173)
+make run              # Show both URLs
 ```
 
-### 3. Scrape Books
+**First time**: `make setup`, then open two terminals: `make backend` & `make frontend`
 
-```bash
-cd backend
-# Quick test (5 pages, ~100 books, ~3-5 min)
-python manage.py scrape_books --max-pages 5
+## Setup Steps
 
-# Full scrape (50 pages, ~1000 books, ~25-35 min)
-python manage.py scrape_books
-```
-
-### 4. Generate AI Insights
-
-```bash
-# For a single book
-python manage.py generate_insights --book-id 1
-
-# For all books (takes time due to API rate limits)
-python manage.py generate_insights --all
-```
-
-### 5. Build Vector Index
-
-```bash
-python manage.py build_index --all
-```
-
-### 6. Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173)
+1. **Prerequisites**: Python 3.12+, Node.js 18+, Groq API key ([console.groq.com](https://console.groq.com))
+2. **Install**: `make install`
+3. **Configure**: Copy `.env.example` to `.env`, add Groq API key
+4. **Migrate**: `make migrate`
+5. **Scrape**: `make scrape` (test) or `make scrape-full` (all)
+6. **Generate AI**: `make insights` (generates summaries, genres, etc.)
+7. **Build Index**: Built into `make setup`
+8. **Run**: `make backend` & `make frontend` in separate terminals
 
 ## API Endpoints
 
-| Method | URL | Description |
-|--------|-----|-------------|
-| GET | `/api/books/` | List books (paginated, filterable) |
-| GET | `/api/books/{id}/` | Book detail with AI insights |
-| GET | `/api/books/{id}/recommendations/` | Top-5 similar books |
-| POST | `/api/scrape/` | Trigger book scraper |
-| POST | `/api/insights/generate/` | Generate AI insights for a book |
-| POST | `/api/rag/query/` | RAG-based Q&A |
-| GET | `/api/chat/history/?session_id=xxx` | Chat history |
-| GET | `/api/docs/` | Swagger UI |
-| GET | `/api/schema/` | OpenAPI 3.0 schema |
+**Swagger UI**: `http://localhost:8000/api/docs/`
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/books/` | GET | List books (paginated) |
+| `/api/books/{id}/` | GET | Book details + AI insights |
+| `/api/books/{id}/recommendations/` | GET | Top-5 similar books |
+| `/api/rag/query/` | POST | Ask questions about books |
+| `/api/chat/history/` | GET | Retrieve chat history |
+
+**Example Query:**
+```bash
+curl -X POST http://localhost:8000/api/rag/query/ \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is this book about?", "session_id": "test-1"}'
+```
+
+## Sample Q&A
+
+**Q**: "What is the main theme of The Great Gatsby?"  
+**A**: Plot summary with context from book content (0.92 relevance)
+
+**Q**: "If I like The Hobbit, what should I read?"  
+**A**: Top recommendations via vector similarity search
+
+**Q**: "What genre is Dune?"  
+**A**: AI classification + related genres
+
+**Q**: "What's the sentiment of reviews?"  
+**A**: Positive/negative analysis with score
+
+## Other Make Commands
+
+```bash
+make insight-single ID=1  # Generate insights for book #1
+make check               # Verify Django setup
+make clean              # Clear cache
+make status             # Check system health
+make test-api           # Test endpoints
+```
+
+## Troubleshooting
+
+- **WebDriver error**: `pip install webdriver-manager --upgrade`
+- **Groq API limit**: Reduce batch size or add delays
+- **Build time**: Vector index builds on `make setup`
+
+## Dependencies
+
+All Python packages in `backend/requirements.txt`, frontend in `frontend/package.json`
+
+Install via: `make install`
+
+---
+
+**Deadline**: 18 April 2026 | **Submission**: GitHub repo + form link
 
 ### Example: List Books
 
