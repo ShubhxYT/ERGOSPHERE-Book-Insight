@@ -209,6 +209,8 @@ curl -X POST http://localhost:8000/api/rag/query/ \
 - RESTful APIs with comprehensive documentation
 - Swagger UI for interactive testing
 
+![Backend Features](screenshots/Backend-Features.png)
+
 ## Notes
 
 - The `author` field is always "Unknown" because books.toscrape.com does not expose author data.
